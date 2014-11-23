@@ -1,0 +1,35 @@
+body {
+	background-color: #333;
+	color: #fff;
+	text-align: center;
+}
+
+.lead {
+	margin: 10px auto;
+}
+
+.guess {
+	width: 204px;
+}
+
+.header-space {
+	min-height: 10%;
+	height:10%;
+	width:100%;
+}
+
+.site-wrapper {
+	display:table;
+	min-height: 100%;
+	height: 100%;
+	width:100%;
+	position:absolute;
+}
+
+#submit {
+	width: 204px;
+}
+
+#replay, #hint {
+	width: 100px;
+}
