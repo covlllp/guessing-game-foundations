@@ -4,6 +4,7 @@ var guesses = init_guesses;
 var prev_guesses = [];
 var prev_guess = null;
 
+
 $(document).ready(function () {
 	$("#submit").on("click", collectGuess);
 	$("#guessbox").on("keyup", function(event) {
@@ -13,15 +14,23 @@ $(document).ready(function () {
 
 
 	$("#hint").on("click", function() {
-		var text = "The answer is " + val;
-		$("#hint-text").text(text);
+		var dom = $("#hint-text");
+		dom.toggleClass("show");
+		if (dom.hasClass("show")) {
+			dom.text("The answer is " + val);
+		} else {
+			dom.text("");
+		}
 	});
 
 	$("#replay").on("click", function() {
 		val = generateNewNumber();
 		guesses = init_guesses;
+		prev_guesses = [];
+		prev_guess = null;
 		$(".popup-text").text("");
 		clearInputBox();
+		updateGuessText();
 	});
 });
 
@@ -38,10 +47,15 @@ function collectGuess() {
 	} else if (guess > val) {
 		text = "You guessed too high!";
 	}
-	$("#status-text").text(text);
+	$("#status-text").text(text).fadeIn(100).fadeOut(100).fadeIn(100);
+	prev_guesses.push(guess);
+	prev_guess = guess;
+	printPrevGuesses();
+	$("#hint-text").removeClass("show");
+	$("#hint-text").text("");
 
 	if (guesses > 0) guesses--;
-	$("#guess-text").text("You have " + guesses + " guesses remaining.");
+	updateGuessText();
 }
 
 function validateNumber(guess) {
@@ -71,4 +85,19 @@ function generateNewNumber() {
 
 function clearInputBox() {
 	$("#guessbox").val("");
+}
+
+function updateGuessText() {
+	var guess_text = guesses > 1 ? " guesses" : " guess"
+	$("#guess-text").text("You have " + guesses + guess_text + " remaining.");
+}
+
+function printPrevGuesses() {
+	var text = "Your previous guesses have been:<br>";
+	for (var i = 0; i < prev_guesses.length; i++) {
+		text += prev_guesses[i] + ", ";
+	}
+	text = text.substring(0, text.length - 2);
+	console.log(text);
+	$("#prev-text").html(text).fadeIn(100).fadeOut(100).fadeIn(100);
 }
