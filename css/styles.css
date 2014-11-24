@@ -26,6 +26,10 @@ body {
 	position:absolute;
 }
 
+.container {
+	width: 600px;
+}
+
 #submit {
 	width: 204px;
 }
@@ -41,4 +45,16 @@ body {
 
 #hint-text {
 	color: #7D7D7D;
+}
+
+.correct {
+	background-color: green;
+}
+
+.cold {
+	color: lightblue;
+}
+
+.hot {
+	color: lightpink;
 }
