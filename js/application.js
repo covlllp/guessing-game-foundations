@@ -1,11 +1,13 @@
 var val = generateNewNumber();
-var init_guesses = 10;
+var init_guesses = 6;
 var guesses = init_guesses;
 var prev_guesses = [];
 var prev_guess = null;
 
 
 $(document).ready(function () {
+	updateGuessText();
+
 	$("#submit").on("click", collectGuess);
 	$("#guessbox").on("keyup", function(event) {
 		var key = event.which;
@@ -16,28 +18,9 @@ $(document).ready(function () {
 	});
 
 
-	$("#hint").on("click", function() {
-		var dom = $("#hint-text");
-		dom.toggleClass("show");
-		if (dom.hasClass("show")) {
-			dom.text("The answer is " + val);
-		} else {
-			dom.text("");
-		}
-	});
+	$("#hint").on("click", toggleHints);
 
-	$("#replay").on("click", function() {
-		val = generateNewNumber();
-		guesses = init_guesses;
-		prev_guesses = [];
-		prev_guess = null;
-		$(".popup-text").text("");
-		$(".disablable").removeClass("disabled");
-		$(".container").removeClass("correct");
-		$("#guessbox").removeAttr("disabled");
-		clearInputBox();
-		updateGuessText();
-	});
+	$("#replay").on("click", replayGame);
 });
 
 function collectGuess() {
@@ -78,17 +61,45 @@ function collectGuess() {
 	}
 
 	if (guesses > 0) guesses--;
-	updateGuessText();
 	prev_guesses.push(guess);
 	prev_guess = guess;
-	clearInputBox();
+	updateGuessText();
 	$("#status-text").html(text).fadeIn(100).fadeOut(100).fadeIn(100);
+	printPrevGuesses(coldhot);
+	removeHints();
+}
+
+function toggleHints() {
+	var dom = $("#hint-text");
+	dom.toggleClass("show");
+	if (dom.hasClass("show")) {
+		dom.text("The answer is " + val);
+	} else {
+		dom.text("");
+	}
+}
+
+function replayGame() {
+	val = generateNewNumber();
+	guesses = init_guesses;
+	prev_guesses = [];
+	prev_guess = null;
+	$(".popup-text").text("");
+	$(".disablable").removeClass("disabled");
+	$(".container").removeClass("correct");
+	$("#guessbox").removeAttr("disabled");
+	clearInputBox();
+	updateGuessText();
+	removeHints();
+}
+
+function removeHints() {
 	$("#hint-text").removeClass("show");
 	$("#hint-text").text("");
-	printPrevGuesses(coldhot);
 }
 
 function validateNumber(guess) {
+	clearInputBox();
 	if (guess == "") return true;
 	else if (guesses == 0) {
 		alert("You have no more guesses! Please click 'Play again'.");
@@ -120,22 +131,11 @@ function updateGuessText() {
 }
 
 function printPrevGuesses(hotcold) {
-	var color_text = hotcold == "hot" ? "class=\"hot\"" : "class=\"cold\""
-
+	var color_text = hotcold == "cold" ? "class=\"cold\"" : "class=\"hot\""
 	var text = prev_guesses.length != 1 ?
 		$("#prev-text").html() + ", ": "Your previous guesses have been: <br>";
-
 	text += "<span " + color_text + ">"
 		+ prev_guesses[prev_guesses.length - 1] + "</span>";
-
-	text = text.substring(0, text.length - 2);
 	$("#prev-text").html(text);
 	$(".colorme").addClass(hotcold);
-
-//	var text = "Your previous guesses have been:<br>";
-//	for (var i = 0; i < prev_guesses.length; i++) {
-//		text += prev_guesses[i] + ", ";
-//	}
-//	text = text.substring(0, text.length - 2);
-//	$("#prev-text").html(text)
 }
