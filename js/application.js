@@ -48,7 +48,7 @@ function collectGuess() {
 	updateGuessParams(guess);
 	if (guesses == 0) {
 		endGame("lose");
-		text = "You ran out of guesses, you lose!"
+		text = "You ran out of guesses, you lose!";
 	}
 
 	// Update HTML
@@ -172,8 +172,13 @@ function clearInputBox() {
 
 // Updates how many guesses remain
 function updateGuessText() {
+	var dom = $("#guess-text");
 	var guess_text = guesses > 1 ? " guesses" : " guess"
-	$("#guess-text").text("You have " + guesses + guess_text + " remaining.");
+	if (guesses == 0) {
+		dom.html("The final number was <b>" + val + "</b>");
+	} else {
+		dom.text("You have " + guesses + guess_text + " remaining.");
+	}
 }
 
 // Prints previous guesses
