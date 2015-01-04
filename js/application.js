@@ -118,6 +118,7 @@ function replayGame() {
 	prev_guesses = [];
 	prev_guess = null;
 	$(".popup-text").text("");
+	$("#status-text").text("You have restarted the game!");
 	$(".disablable").removeClass("disabled");
 	$(".container").removeClass("correct");
 	$(".container").removeClass("lose");	
